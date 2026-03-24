@@ -11,7 +11,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: ["https://student-portal-frontend-s881.onrender.com", "http://localhost:5173"], 
+    origin: ["https://project-eb8l.onrender.com", "http://localhost:5173"], 
     credentials: true
 }));
 
