@@ -46,7 +46,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "None",
     };
 
     const createdUser = {
@@ -91,7 +92,8 @@ const login = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "None",
     };
 
     // Remove sensitive data
@@ -115,7 +117,8 @@ const logout = asyncHandler(async (req, res) => {
     // In a full implementation, we would invalidate the refresh token in the DB
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "None",
     };
 
     return res
