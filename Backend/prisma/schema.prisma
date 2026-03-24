@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  password  String
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+  student   Student?
+}
+
+model Student {
+  id                 Int                  @id @default(autoincrement())
+  userId             Int                  @unique
+  fullName           String
+  rollNumber         String?
+  branch             String?
+  year               Int?
+  graduationYear     Int?
+  cgpa               Float?
+  bio                String?
+  profileDescription String?
+  phone              String?
+  location           String?
+  profilePhotoUrl    String?
+  githubUrl          String?
+  linkedinUrl        String?
+  leetcodeUrl        String?
+  codeforcesUrl      String?
+  codechefUrl        String?
+  xUrl               String?
+  imageUrl           String?
+  isPublic           Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  codeforcesUsername String?
+  githubUsername     String?
+  leetcodeUsername   String?
+  portfolioViews     Int                  @default(0)
+  slug               String               @unique
+  contactMessages    ContactMessage[]
+  resumeRequests     ResumeRequest[]
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  academics          StudentAcademic[]
+  achievements       StudentAchievement[]
+  experiences        StudentExperience[]
+  projects           StudentProject[]
+  skills             StudentSkill[]
+}
+
+model StudentAcademic {
+  id                Int      @id @default(autoincrement())
+  studentId         Int
+  level             String
+  institution       String
+  boardOrUniversity String?
+  courseOrStream    String?
+  startYear         Int?
+  endYear           Int?
+  cgpaOrPercentage  String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  student           Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model StudentExperience {
+  id          Int       @id @default(autoincrement())
+  studentId   Int
+  title       String
+  company     String
+  location    String?
+  startDate   DateTime?
+  endDate     DateTime?
+  isCurrent   Boolean   @default(false)
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model StudentSkill {
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  name      String
+  level     String   @default("Beginner")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model StudentProject {
+  id               Int       @id @default(autoincrement())
+  studentId        Int
+  title            String
+  shortDescription String?
+  techStack        String?
+  imageUrl         String? 
+  githubUrl        String?
+  demoUrl          String?
+  role             String?
+  startDate        DateTime?
+  endDate          DateTime?
+  status           String    @default("unverified")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  student          Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model StudentAchievement {
+  id              Int       @id @default(autoincrement())
+  studentId       Int
+  title           String
+  type            String?
+  organization    String?
+  positionOrScore String?
+  date            DateTime?
+  proofUrl        String?
+  status          String    @default("unverified")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  student         Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model ContactMessage {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  senderName  String
+  senderEmail String
+  message     String
+  createdAt   DateTime @default(now())
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model ResumeRequest {
+  id                     Int      @id @default(autoincrement())
+  studentId              Int
+  jobTitle               String?
+  jobDescriptionText     String?
+  selectedProjectIds     Int[]
+  selectedAchievementIds Int[]
+  generatedResumeJson    Json?
+  createdAt              DateTime @default(now())
+  student                Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
